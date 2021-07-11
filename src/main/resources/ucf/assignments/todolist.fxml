@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ucf.assignments.ItemController">
+   <children>
+      <MenuBar prefHeight="25.0" prefWidth="826.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#saveListButtonClicked" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadListButtonClicked" text="Load" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Text layoutX="14.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ToDoList" />
+      <Text layoutX="525.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item description" />
+      <Text layoutX="525.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item due date" />
+      <Button layoutX="529.0" layoutY="298.0" mnemonicParsing="false" onAction="#addItemButtonClicked" prefWidth="120.0" text="Add item" AnchorPane.bottomAnchor="80.0" />
+      <Button layoutX="529.0" layoutY="324.0" mnemonicParsing="false" onAction="#removeItemButtonClicked" prefWidth="120.0" text="Remove item" AnchorPane.bottomAnchor="50.85714285714283" />
+      <Button layoutX="529.0" layoutY="354.0" mnemonicParsing="false" onAction="#clearItemsButtonCLicked" prefWidth="120.0" text="Clear items" AnchorPane.bottomAnchor="20.857142857142833" />
+      <MenuButton layoutX="660.0" layoutY="294.0" mnemonicParsing="false" prefWidth="120.0" text="Edit items" AnchorPane.bottomAnchor="80.85714285714283">
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#editItemDescriptionButtonClicked" text="Edit description" />
+          <MenuItem mnemonicParsing="false" onAction="#editItemDueDateButtonClicked" text="Edit due date" />
+            <MenuItem mnemonicParsing="false" onAction="#alterCompletionButtonClicked" text="Toggle completion" />
+        </items>
+      </MenuButton>
+      <TextField fx:id="DescriptionField" alignment="TOP_LEFT" layoutX="525.0" layoutY="52.0" prefHeight="181.0" prefWidth="265.0" promptText="enter description" AnchorPane.leftAnchor="525.0" AnchorPane.rightAnchor="10.0" />
+      <DatePicker fx:id="DueDate" layoutX="525.0" layoutY="253.0" promptText="enter due date" AnchorPane.leftAnchor="525.0" />
+      <TableView fx:id="TableDisplay" layoutX="14.0" layoutY="43.0" prefHeight="345.0" prefWidth="499.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="305.0" AnchorPane.topAnchor="43.0">
+        <columns>
+          <TableColumn fx:id="TableDescription" prefWidth="337.0" text="Description" />
+          <TableColumn fx:id="TableDueDate" text="Due Date" />
+            <TableColumn fx:id="TableCompletion" text="Completion" />
+        </columns>
+      </TableView>
+      <CheckBox fx:id="incompleteItems" layoutX="663.0" layoutY="358.0" mnemonicParsing="false" onAction="#DisplayItemsButtonClicked" selected="true" text="Display incomplete items" />
+      <CheckBox fx:id="completeItems" layoutX="663.0" layoutY="328.0" mnemonicParsing="false" onAction="#DisplayItemsButtonClicked" selected="true" text="Display complete items" />
+   </children>
+</AnchorPane>

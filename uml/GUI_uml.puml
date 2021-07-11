@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class App{
+    main()
+    start()
+}
+
+class ItemController{
+    ItemList: List<Item>
+    TableView: ItemDisplay
+    TextField: DescriptionField
+    DatePicker: DueDate
+    CheckBox: completeItems
+    CheckBox: incompleteItems
+    addItemButtonClicked()
+    removeItemButtonClicked()
+    clearItemsButtonClicked()
+    editItemDescriptionButtonClicked()
+    editItemDueDateButtonClicked()
+    markItemCompleteButtonClicked()
+    DisplayItemsButtonClicked()
+    SaveListButtonClicked()
+    LoadListButtonClicked()
+    addItem()
+    removeItem()
+    clearItems()
+    editItemDescription()
+    editItemDueDate()
+    markItemComplete()
+    DisplayItems()
+    SaveList()
+    LoadList()
+}
+
+class Item{
+    Description: String
+    DueDate: String 'YYYY-MM-DD'
+    Completion: Boolean
+    constructors()
+    getters()
+}
+
+Item <-* ItemController
+App *--> ItemController
+
+
+@enduml
