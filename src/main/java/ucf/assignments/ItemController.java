@@ -1,3 +1,8 @@
+/*
+ *  UCF COP3330 Summer 2021 Assignment 4 Solution
+ *  Copyright 2021 Alek Dussuau
+ */
+
 package ucf.assignments;
 
 import javafx.collections.FXCollections;
@@ -7,10 +12,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 
 public class ItemController implements Initializable {
@@ -129,8 +142,7 @@ public class ItemController implements Initializable {
         //remove item from display
 
         toDoList.remove(tempItem);
-        TableDisplay.getItems().removeAll(tempItem);
-
+        displayItems();
     }
 
     public void clearItems(){
@@ -139,8 +151,7 @@ public class ItemController implements Initializable {
         //clear all items from display
 
         toDoList.clear();
-        TableDisplay.getItems().clear();
-        System.out.println(toDoList.size());
+        displayItems();
     }
 
     public void editItemDescription(String tempDescription, Item tempItem){
@@ -151,7 +162,7 @@ public class ItemController implements Initializable {
 
         int tempIndex = toDoList.indexOf(tempItem);
         toDoList.set(tempIndex, new Item (tempDescription, tempItem.getDueDate(), tempItem.getComplete()));
-        TableDisplay.getItems().set(tempIndex, new Item (tempDescription, tempItem.getDueDate(), tempItem.getComplete()));
+        displayItems();
     }
 
     public void editItemDueDate(String tempDueDate, Item tempItem){
@@ -162,7 +173,7 @@ public class ItemController implements Initializable {
 
         int tempIndex = toDoList.indexOf(tempItem);
         toDoList.set(tempIndex, new Item (tempItem.getDescription(), tempDueDate, tempItem.getComplete()));
-        TableDisplay.getItems().set(tempIndex, new Item (tempItem.getDescription(), tempDueDate, tempItem.getComplete()));
+        displayItems();
     }
 
     public void alterItemComplete(Item tempItem){
@@ -174,26 +185,103 @@ public class ItemController implements Initializable {
 
         if(!tempItem.getComplete()){
             toDoList.set(tempIndex, new Item (tempItem.getDescription(), tempItem.getDueDate(), true));
-            TableDisplay.getItems().set(tempIndex, new Item (tempItem.getDescription(), tempItem.getDueDate(), true));
+            displayItems();
         }else{
             toDoList.set(tempIndex, new Item (tempItem.getDescription(), tempItem.getDueDate(), false));
-            TableDisplay.getItems().set(tempIndex, new Item (tempItem.getDescription(), tempItem.getDueDate(), false));
+            displayItems();
         }
 
     }
 
     public void saveList(){
 
-        //loop through currently selected list
-        //store items of list into txt file
+        //create a fileChooser
+        //set data for said fileChooser
+        //make a file to store for fileChooser
+        //write to created file
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save List");
+        fileChooser.setInitialFileName("myList");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text files", "*.txt"));
+
+        FileWriter fileWrite = null;
+        String fileData = "";
+
+        try
+        {
+            File file = fileChooser.showSaveDialog(new Stage());
+            fileWrite = new FileWriter(file);
+            for(int i = 0; i < toDoList.size(); i++){
+                fileData += toDoList.get(i).getDescription() + "\n" +
+                            toDoList.get(i).getDueDate() + "\n" +
+                            toDoList.get(i).getComplete() + "\n\n";
+            }
+
+            fileWrite.write(fileData);
+            fileWrite.close();
+        }
+        catch (Exception ex)
+        {
+
+        }
 
     }
 
     public void loadList(){
 
-        //open txt file
-        //read txt file and store into list of items
+        //call read file to get the data from the file
+        //clear the current toDoList
+        //store data from file into toDolist
+        //updateDisplay
 
+        List<String> data = readFile();
+        toDoList.clear();
+        Boolean temp = null;
+
+        for(int i = 0; i < data.size(); i += 4){
+            System.out.println(data.get((i+3)));
+            if(data.get(i+2).equals("true")){
+                temp = true;
+            }else{
+                temp = false;
+            }
+            toDoList.add(new Item(data.get(i),data.get(i+1),temp));
+        }
+
+        displayItems();
+    }
+
+    public List<String> readFile(){
+
+        //Create a fileChooser
+        //set data to fileChooser
+        //make a scanner to read the selected file
+        //Store the file data into an arrayList
+        //return list to loadFile method
+
+        List<String> ret = new ArrayList<>();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open txt file");
+        File file = fileChooser.showOpenDialog(new Stage());
+        Scanner reader = null;
+
+        try
+        {
+            reader = new Scanner(file);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        while(reader.hasNextLine()){
+            String fileLine = reader.nextLine();
+            ret.add(fileLine);
+        }
+
+
+        return ret;
     }
 
     public void displayItems(){
@@ -201,22 +289,23 @@ public class ItemController implements Initializable {
         //clear all items from list
         //check to see what display is selected
         //display based on selected display
-
-        TableDisplay.getItems().clear();
-        if(completeItems.isSelected() && incompleteItems.isSelected()){
-            for(int i = 0; i < toDoList.size(); i++){
-                TableDisplay.getItems().add(toDoList.get(i));
-            }
-        }else if(completeItems.isSelected()){
-            for(int i = 0; i < toDoList.size(); i++){
-                if((toDoList.get(i).getComplete())){
+        if(this.TableDisplay != null){
+            TableDisplay.getItems().clear();
+            if(completeItems.isSelected() && incompleteItems.isSelected()){
+                for(int i = 0; i < toDoList.size(); i++){
                     TableDisplay.getItems().add(toDoList.get(i));
                 }
-            }
-        }else if(incompleteItems.isSelected()){
-            for(int i = 0; i < toDoList.size(); i++){
-                if((!toDoList.get(i).getComplete())){
-                    TableDisplay.getItems().add(toDoList.get(i));
+            }else if(completeItems.isSelected()){
+                for(int i = 0; i < toDoList.size(); i++){
+                    if((toDoList.get(i).getComplete())){
+                        TableDisplay.getItems().add(toDoList.get(i));
+                    }
+                }
+            }else if(incompleteItems.isSelected()) {
+                for (int i = 0; i < toDoList.size(); i++) {
+                    if ((!toDoList.get(i).getComplete())) {
+                        TableDisplay.getItems().add(toDoList.get(i));
+                    }
                 }
             }
         }

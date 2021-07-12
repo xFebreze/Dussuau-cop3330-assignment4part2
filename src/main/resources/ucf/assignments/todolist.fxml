@@ -23,11 +23,6 @@
                   <MenuItem mnemonicParsing="false" onAction="#loadListButtonClicked" text="Load" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
         </menus>
       </MenuBar>
       <Text layoutX="14.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ToDoList" />
@@ -47,9 +42,9 @@
       <DatePicker fx:id="DueDate" layoutX="525.0" layoutY="253.0" promptText="enter due date" AnchorPane.leftAnchor="525.0" />
       <TableView fx:id="TableDisplay" layoutX="14.0" layoutY="43.0" prefHeight="345.0" prefWidth="499.0" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="305.0" AnchorPane.topAnchor="43.0">
         <columns>
-          <TableColumn fx:id="TableDescription" prefWidth="337.0" text="Description" />
-          <TableColumn fx:id="TableDueDate" text="Due Date" />
-            <TableColumn fx:id="TableCompletion" text="Completion" />
+          <TableColumn fx:id="TableDescription" prefWidth="344.57147693634033" text="Description" />
+          <TableColumn fx:id="TableDueDate" prefWidth="79.9998779296875" text="Due Date" />
+            <TableColumn fx:id="TableCompletion" prefWidth="80.99997820172996" text="Completion" />
         </columns>
       </TableView>
       <CheckBox fx:id="incompleteItems" layoutX="663.0" layoutY="358.0" mnemonicParsing="false" onAction="#DisplayItemsButtonClicked" selected="true" text="Display incomplete items" />
