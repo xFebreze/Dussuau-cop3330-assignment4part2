@@ -10,9 +10,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -49,12 +53,30 @@ public class ItemController implements Initializable {
     @FXML
     public void addItemButtonClicked(ActionEvent actionevent){
 
+        //Check to see if the date picker field is null
         //Convert text field and date picker to strings
+        //check if string meets requirements if not show alert
         //call add item w/ strings
+        //clear fields for typing
+
+        if(DueDate.getValue() == null){
+            alerts("Warning","Please use the date picker to pick a date");
+            return;
+        }
 
         String date = DueDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String str = DescriptionField.getText();
+
+        if(str.length() < 1 || str.length() > 256){
+            DescriptionField.clear();
+            alerts("Warning", "Please make sure you have a description between 1-256 characters");
+            return;
+        }
+
         addItem(str, date);
+        DescriptionField.clear();
+        DueDate.getEditor().clear();
+
     }
 
     @FXML
@@ -79,24 +101,40 @@ public class ItemController implements Initializable {
     public void editItemDescriptionButtonClicked(ActionEvent actionevent){
 
         //convert textField to str
+        //Check if string is valid
         //get selected Item
-        //call editItemDescription
+        //call editItemDescription with str
+        //clear description field
 
         String str = DescriptionField.getText();
+        if(str.length() < 1 || str.length() > 256){
+            DescriptionField.clear();
+            alerts("Warning", "Please make sure you have a description between 1-256 characters");
+            return;
+        }
         Item temp = TableDisplay.getSelectionModel().getSelectedItem();
         editItemDescription(str, temp);
+        DescriptionField.clear();
+
     }
 
     @FXML
     public void editItemDueDateButtonClicked(ActionEvent actionevent){
 
+        //check if dueDate is not null
         //convert dueDate to date
         //get selected Item
-        //call editItemDueDate
+        //call editItemDueDate with date
+        //clear datePicker
 
+        if(DueDate.getValue() == null ){
+            alerts("Warning","Please use the date picker to pick a date");
+            return;
+        }
         String date = DueDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         Item temp = TableDisplay.getSelectionModel().getSelectedItem();
         editItemDueDate(date, temp);
+        DueDate.getEditor().clear();
     }
 
     @FXML
@@ -117,14 +155,46 @@ public class ItemController implements Initializable {
 
     @FXML
     public void saveListButtonClicked(ActionEvent actionevent){
-        //when save list button is clicked
-        saveList();
+        //prompt a file chooser to save a file
+        //use saveList with the saved file from file chooser
+
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save List");
+        fileChooser.setInitialFileName("myList");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text files", "*.txt"));
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        saveList(file);
     }
 
     @FXML
     public void loadListButtonClicked(ActionEvent actionevent){
-        //when load list button is clicked
-        loadList();
+        //prompt a file chooser to save a file
+        //use loadList with the saved file from file chooser
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open txt file");
+        File file = fileChooser.showOpenDialog(new Stage());
+        loadList(file);
+    }
+
+    @FXML
+    public void helpButtonClicked(ActionEvent actionEvent){
+        //Prompts the help screen
+        alerts("Help","(This is dedicated to Rey)\n\n" +
+                "Add Item: to add an item to the list type your description\n" +
+                "and selected a due date then click the add item button\n\n" +
+                "Remove Item: to remove an item selected an item from the list\n" +
+                "then click the remove item button\n\n" +
+                "Edit Description: first select the item you want to edit\n" +
+                "after type in the description box what you want your new\n" +
+                "description to say then click the edit description button\n\n" +
+                "Edit DueDate: first select the item you want to edit\n" +
+                "after select a new date that you would like to change to\n" +
+                "then click the edit due date button\n\n" +
+                "Toggle completion: first select the item from the list you\n" +
+                "would like to mark then click the toggle completion button\n\n");
     }
 
     public void addItem(String tempDescription, String tempDueDate){
@@ -193,24 +263,19 @@ public class ItemController implements Initializable {
 
     }
 
-    public void saveList(){
+    public void saveList(File file){
 
         //create a fileChooser
         //set data for said fileChooser
         //make a file to store for fileChooser
         //write to created file
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save List");
-        fileChooser.setInitialFileName("myList");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text files", "*.txt"));
 
         FileWriter fileWrite = null;
         String fileData = "";
 
         try
         {
-            File file = fileChooser.showSaveDialog(new Stage());
             fileWrite = new FileWriter(file);
             for(int i = 0; i < toDoList.size(); i++){
                 fileData += toDoList.get(i).getDescription() + "\n" +
@@ -228,14 +293,14 @@ public class ItemController implements Initializable {
 
     }
 
-    public void loadList(){
+    public void loadList(File file){
 
         //call read file to get the data from the file
         //clear the current toDoList
         //store data from file into toDolist
         //updateDisplay
 
-        List<String> data = readFile();
+        List<String> data = readFile(file);
         toDoList.clear();
         Boolean temp = null;
 
@@ -252,7 +317,7 @@ public class ItemController implements Initializable {
         displayItems();
     }
 
-    public List<String> readFile(){
+    public List<String> readFile(File file){
 
         //Create a fileChooser
         //set data to fileChooser
@@ -261,9 +326,7 @@ public class ItemController implements Initializable {
         //return list to loadFile method
 
         List<String> ret = new ArrayList<>();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open txt file");
-        File file = fileChooser.showOpenDialog(new Stage());
+
         Scanner reader = null;
 
         try
@@ -310,6 +373,28 @@ public class ItemController implements Initializable {
             }
         }
 
+    }
+
+    public void alerts(String title, String msg){
+        //used for alerts when user does something wrong or needs help etc.
+        Stage temp = new Stage();
+
+        temp.initModality(Modality.APPLICATION_MODAL);
+        temp.setTitle(title);
+        temp.setMinWidth(250);
+
+        Label label = new Label();
+        label.setText(msg);
+        Button closeButton = new Button("Close the window");
+        closeButton.setOnAction(event -> temp.close());
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(label, closeButton);
+        layout.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout);
+        temp.setScene(scene);
+        temp.showAndWait();
     }
 
 }

@@ -23,6 +23,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#loadListButtonClicked" text="Load" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#helpButtonClicked" text="Help" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <Text layoutX="14.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ToDoList" />

@@ -22,6 +22,7 @@ class ItemController{
     DisplayItemsButtonClicked()
     SaveListButtonClicked()
     LoadListButtonClicked()
+    HelpButtonClicked()
     addItem()
     removeItem()
     clearItems()
@@ -32,6 +33,7 @@ class ItemController{
     SaveList()
     LoadList()
     ReadFile()
+    alerts()
 }
 
 class Item{

@@ -7,6 +7,7 @@ package ucf.assignments;
 import org.junit.jupiter.api.Test;
 
 
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -115,4 +116,55 @@ public class ItemControllerTest {
         assertEquals(false, AppTest.toDoList.get(0).getComplete());
     }
 
+    @Test
+    public void DisplayTest(){
+
+        //all of my displays are in one function that operates via checkboxes
+        //I can't figure out how to do checkboxes as test
+
+    }
+
+    @Test
+    public void LoadTest(){
+        //Make new item controller
+        //Load a list from a resource folder
+        //Check items of todolist to make sure they are identical to whats in txt file
+
+        ItemController AppTest = new ItemController();
+
+        AppTest.loadList(new File("resources/TestLoad.txt"));
+        assertEquals("Item1", AppTest.toDoList.get(0).getDescription());
+        assertEquals("2021-07-11", AppTest.toDoList.get(0).getDueDate());
+        assertEquals(false, AppTest.toDoList.get(0).getComplete());
+        assertEquals("Item2", AppTest.toDoList.get(1).getDescription());
+        assertEquals("2021-07-12", AppTest.toDoList.get(1).getDueDate());
+        assertEquals(false, AppTest.toDoList.get(1).getComplete());
+        assertEquals("Item3", AppTest.toDoList.get(2).getDescription());
+        assertEquals("2021-07-12", AppTest.toDoList.get(2).getDueDate());
+        assertEquals(true, AppTest.toDoList.get(2).getComplete());
+        assertEquals("Item4", AppTest.toDoList.get(3).getDescription());
+        assertEquals("2021-07-14", AppTest.toDoList.get(3).getDueDate());
+        assertEquals(false, AppTest.toDoList.get(3).getComplete());
+    }
+
+    @Test
+    public void SaveTest(){
+        //make new item controller
+        //add item to the list
+        //save list to resource folder
+        //clear list
+        //load list
+        //assert equals with know item data
+
+        ItemController AppTest = new ItemController();
+
+        AppTest.addItem("SaveFileCheck","1212-12-12");
+        AppTest.saveList(new File("resources/saveFile.txt"));
+        AppTest.clearItems();
+        AppTest.loadList(new File("resources/saveFile.txt"));
+        assertEquals("SaveFileCheck", AppTest.toDoList.get(0).getDescription());
+        assertEquals("1212-12-12", AppTest.toDoList.get(0).getDueDate());
+        assertEquals(false, AppTest.toDoList.get(0).getComplete());
+
+    }
 }
